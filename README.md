@@ -253,5 +253,390 @@ const App = () => (
 
 Состояние (state) — это ещё одна из центральных концепций React. Именно здесь хранятся данные приложения — то есть то, что может меняться.
 
+Рассмотрим состояния на примере формы ввода данных - `input`.
+
+файл App.js:
+```javaScript
+import './App.css';
+import SimpleForm from './SimpleForm';
 
 
+const App = () => (
+  <div>
+      <SimpleForm/>
+  </div>
+);
+
+export default App;
+```
+
+файл Greetings.js:
+```javaScript
+import React from "react";
+
+const Greetings = ({ firstName, lastName }) => (
+    <div>
+        Hey you! {firstName} {lastName}!
+    </div>
+);
+
+export default Greetings;
+```
+
+файл SimpleForm.js:
+```javaScript
+import React from "react";
+import Greetings from "./Greetings";
+
+export default class SimpleForm extends React.Component{
+   state = {
+    firstName: ""
+   };
+
+   onFirstNaneChange = event => 
+    this.setState({
+        firstName: event.target.value
+    });
+
+    render() {
+        return(
+            <div>
+                <input type="text" name="firstName" onChange={this.onFirstNaneChange}/>
+                <Greetings firstName={this.state.firstName}/>
+            </div>
+        )
+    }
+}
+```
+Состояние можно представить себе как простой JavaScript-объект, который, в виде свойства, хранится в классе компонента SimpleForm. В этот объект мы добавляем свойство firstName.
+
+Тут мы оснастили поле firstName обработчиком события. Он запускается каждый раз когда пользователь вводит хотя бы один символ в поле. В классе за обработку события onChange отвечает свойство onFirstNameChange, в представляющей которое функции выполняется команда следующего вида:
+```javaScript
+this.setState(...)
+```
+
+Именно здесь выполняется обновление состояния компонента. Состояние компонентов не обновляют напрямую. Это делается только с использованием метода setState. Для того чтобы записать новое значение в свойство firstName, мы просто передаём этому методу объект, содержащий то, что нужно записать в состояние:
+
+```javaScript
+{ firstName: event.target.value }
+```
+
+В данном случае `event.target.value` — это то, что пользователь ввёл в поле формы, а именно — его имя.
+
+Обратите внимание на то, что мы не объявили `onFirstNameChange` в виде метода. Очень важно, чтобы подобные вещи объявлялись бы в виде свойств класса, содержащих стрелочные функции, а не в виде методов. Если объявить подобную функцию в виде метода, тогда this будет привязано к элементу формы, который вызывает этот метод, а не к классу, как мы могли бы ожидать.
+
+### Проверка данных, введённых в форму 
+```JavaScript
+import React from "react";
+import Greetings from "./Greetings";
+
+export default class SimpleForm extends React.Component{
+    // Состояние приложения
+   state = {
+    firstName: "", 
+    firstNameError: "",
+   };
+
+    // Проверка данных выполняется в стрелочной функции validateName. 
+    // Она проверяет введённое имя с помощью регулярного выражения:
+   validateName = name => {
+    const regex = /[A-Za-z]{3,}/;
+
+    return !regex.test(name)
+    ? "The name must contain at least three letters. Numbers and special characters are not allowed."
+    : "";
+   }
+
+   // обработчик события onBlur, который вызывается когда пользователь покидает поле ввода
+   onFirstNaneBlur = () => {
+    
+    const { firstName } = this.state; // Эквивалентна этой строке const firstName = this.state.firstName;
+
+    const firstNameError = this.validateName( firstName );
+
+    return this.setState({ firstNameError });
+   };
+
+   onFirstNaneChange = event => 
+    this.setState({
+        firstName: event.target.value
+    });
+
+    render() {
+
+        const {firstNameError, firstName} = this.state;
+
+        return(
+            <div>
+                <div>
+                    <label>
+                        First name:
+                        <input
+                            type="text"
+                            name="firstName"
+                            onChange={this.onFirstNaneChange}
+                            onBlur={this.onFirstNaneBlur}
+                        />
+                    </label>
+                    {firstNameError && <div>{firstNameError}</div>}
+                </div>
+
+                <Greetings firstName={firstName}/>
+                
+            </div>
+
+        );
+    }
+}
+```
+Элемент div, содержащий сообщение об ошибке, будет выведен лишь в том случае, если значение firstNameError может быть приведено к true.
+
+
+## Стили 
+### Стили внутри файла разметки
+
+```JavaScript
+render() {
+
+        const {firstNameError, firstName} = this.state;
+
+        return(
+            <div
+                style={{
+                    margin: 50, 
+                    padding: 10, 
+                    width: 300, 
+                    border: "1px solid black", 
+                    backgroundColor: "black", 
+                    color: "white"
+                }}
+            >
+                <div style={{marginBottom: 10}}>
+                    <label>
+                        First name:
+                        <input
+                            style={{backgroundColor: '#EFEFFF', marginLeft: 10}}
+                            type="text"
+                            name="firstName"
+                            onChange={this.onFirstNaneChange}
+                            onBlur={this.onFirstNaneBlur}
+                        />
+                    </label>
+                    {firstNameError && <div style={{ color: 'red', margin: 5 }}>{firstNameError}</div>}
+                </div>
+
+                <Greetings firstName={firstName}/>
+                
+            </div>
+
+        );
+    }
+```
+
+### Стили в отдельном файле
+файл `style.js`:
+```javaScript
+const style = {
+    form: {
+        margin: 50,
+        padding: 10,
+        width: 300,
+        border: "1px solid black",
+        backgroundColor: "black",
+        color: "white"
+    },
+    inputGroup: {
+        marginBottom: 10
+    },
+    input: {
+        backgroundColor: "#EFEFFF",
+        marginLeft: 10
+    },
+    error: {
+        color: "red",
+        margin: 5
+    }
+};
+
+export default style;
+```
+
+файл `simpleForm.js`:
+```javaScript
+import React from "react";
+import Greetings from "./Greetings";
+import style from "./style";
+
+export default class SimpleForm extends React.Component{
+    // Состояние приложения
+   state = {
+    firstName: "", 
+    firstNameError: "",
+   };
+
+    // Проверка данных выполняется в стрелочной функции validateName. 
+    // Она проверяет введённое имя с помощью регулярного выражения:
+   validateName = name => {
+    const regex = /[A-Za-z]{3,}/;
+
+    return !regex.test(name)
+    ? "The name must contain at least three letters. Numbers and special characters are not allowed."
+    : "";
+   }
+
+   // обработчик события onBlur, который вызывается когда пользователь покидает поле ввода
+   onFirstNaneBlur = () => {
+
+    const { firstName } = this.state; // Эквивалентна этой строке const firstName = this.state.firstName;
+
+    const firstNameError = this.validateName( firstName );
+
+    return this.setState({ firstNameError });
+   };
+
+   onFirstNaneChange = event => 
+    this.setState({
+        firstName: event.target.value
+    });
+
+    render() {
+
+        const {firstNameError, firstName} = this.state;
+
+        return(
+            <div style={style.form}>
+                <div style={style.inputGroup}>
+                    <label>
+                        First name:
+                        <input
+                            style={style.input}
+                            type="text"
+                            name="firstName"
+                            onChange={this.onFirstNaneChange}
+                            onBlur={this.onFirstNaneBlur}
+                        />
+                    </label>
+                    {firstNameError && <div style={style.error}>{firstNameError}</div>}
+                </div>
+
+                <Greetings firstName={firstName}/>
+                
+            </div>
+
+        );
+    }
+}
+```
+
+## Разделение кода на фрагменты
+### Поле ввода (TextField)
+
+Файл `TextField.js`: 
+```javaScript
+import React from "react";
+import style from "./style";
+
+const TextField = ({name, onChange, onBlur, error, label}) => (
+    <div style={style.inputGroup}>
+     <label>
+      {label}
+      <input
+        style={style.input}
+        type="text"
+        name={name}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+      {error && <div style={style.error}>{error}</div>}
+    </label>
+   </div>
+)
+
+export default TextField;
+```
+
+Файл `SimpleForm.js`:
+```javaScript
+... 
+ render() {
+
+        const {firstNameError, firstName, lastName, lastNameError } = this.state;
+
+        return(
+            <div style={style.form}>
+                
+                <TextField name="firstName"
+                    label="First name:"
+                    onChange={this.onFirstNameChange}
+                    onBlur={this.onFirstNameBlur}
+                    error={firstNameError} />
+
+                <TextField name="lastName"
+                   label="Last name:"
+                   onChange={this.onLastNameChange}
+                   onBlur={this.onLastNameBlur}
+                   error={lastNameError} />
+
+                <Greetings firstName={firstName} lastName={lastName}/>   
+            </div>
+        );
+    }
+...
+```
+
+### Описание одинаковых компонентов в отдельных файлах
+файл `FirstNameField.js`: 
+```javaScript
+import React from "react";
+import TextField from "./TextField";
+
+const FirstNameField = ({...rest}) => (
+    <TextField name = "firstName"
+               label="First Name:"
+               {...rest} />
+);
+
+export default FirstNameField
+```
+файл `LastNameField.js`: 
+```javaScript
+import React from "react";
+import TextField from "./TextField";
+
+const LastNameField = ({...rest}) => (
+    <TextField name = "lastName"
+               label="Last Name:"
+               {...rest} />
+);
+
+export default LastNameField
+```
+
+Тут мы просто возвращаем компонент, заранее подготовленный для вывода имени пользователя. В конструкции `({...rest})` используется синтаксис оставшихся параметров (оператор `rest`, выглядящий как три точки). Благодаря использованию этого оператора оказывается, что всё, что будет передано компоненту в виде свойств, попадёт в объект rest. Затем, для того, чтобы передать свойства компоненту TextField, используется так называемый «оператор расширения», или оператор `spread` (он, в конструкции `{...rest}`, тоже выглядит как три точки). Тут берётся объект `rest`, из него выделяются его свойства, которые передаются компоненту TextField.
+
+Другими словами, все эти конструкции позволяют выразить следующую идею: мы хотим взять всё, что пришло в компонент FirstNameField и передать это в неизменном виде компоненту TextField.
+
+файл "SimpleForm.js": 
+```JavaScript
+ ...
+ render() {
+
+        const {firstNameError, firstName, lastName, lastNameError } = this.state;
+
+        return(
+            <div style={style.form}>
+                
+                <FirstNameField onChange={this.onFirstNameChange}
+                        onBlur={this.onFirstNameBlur}
+                        error={firstNameError} />
+
+                <LastNameField onChange={this.onLastNameChange}
+                        onBlur={this.onLastNameBlur}
+                        error={lastNameError} />
+
+                <Greetings firstName={firstName} lastName={lastName}/>   
+            </div>
+        );
+    }
+...
+```
