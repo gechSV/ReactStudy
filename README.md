@@ -8,6 +8,18 @@
 * `сd react-intro` 
 * `npm start`
 
+## Настройка проекта из оффициального мануала react
+1) npx create-react-app app-name
+2) cd name-app
+3) npm start
+4) Удаление файлов в `src`:
+  * del * (for Windows)
+  * rm -f * (for Mac or Linux) 
+1) Создание новых файлов взамен удалённых: 
+  * new-item index.css
+  * new-item index.js
+1) Создание папок:
+  * new-item 'dirName' -itemType Directory
 ## React Application Structure
 ### index.html
 path - `public/index.html`
@@ -640,3 +652,4 @@ export default LastNameField
     }
 ...
 ```
+
