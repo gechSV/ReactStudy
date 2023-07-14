@@ -20,6 +20,11 @@
   * new-item index.js
 1) Создание папок:
   * new-item 'dirName' -itemType Directory
+
+## настройка под typescript
+### Client
+* npx create-react-app client-name --template typescript
+
 ## React Application Structure
 ### index.html
 path - `public/index.html`
@@ -653,3 +658,23 @@ export default LastNameField
 ...
 ```
 
+# Настройка серверного приложения NodeJS + Express + mongoDB
+
+## Server lib
+* cd server
+* npm init -y
+* npm i express cors cookie-parser 
+* npm i nodemon --save-dev
+* npm run dev
+* npm i dotenv
+* npm i mongodb
+* npm i mongoose
+
+## Установка mongoDB
+* Руководство:  https://metanit.com/nosql/mongodb/1.2.php
+* MongoDB: https://www.mongodb.com/try/download/community-kubernetes-operator
+* Mogosh: https://www.mongodb.com/try/download/shell
+* Драйвера: https://www.mongodb.com/docs/drivers/
+
+` db.users.insertOne( { name: "Tom" } )
+db.users.find()`   
