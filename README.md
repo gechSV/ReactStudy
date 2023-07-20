@@ -677,4 +677,8 @@ export default LastNameField
 * Драйвера: https://www.mongodb.com/docs/drivers/
 
 ` db.users.insertOne( { name: "Tom" } )
-db.users.find()`   
+db.users.find()`  
+
+## Подключение прокси сервера
+* npm config set https-proxy http://192.168.137.254:3128
+* npm config set proxy http://192.168.137.254:3128
