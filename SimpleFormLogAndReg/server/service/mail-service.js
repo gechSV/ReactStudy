@@ -6,6 +6,7 @@ class MailService {
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
             secure: false,
+            // proxy: "http://192.168.137.254:3128/", 
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASSWORD,
