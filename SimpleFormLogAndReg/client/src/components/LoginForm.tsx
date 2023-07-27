@@ -19,7 +19,7 @@ const LoginForm: FC = () => {
             <input
                 onChange={e => setPassword(e.target.value)}
                 value={password}
-                type='text'
+                type='password'
                 placeholder='Password'
             />
             <button onClick={() => store.login(email, password)}>

@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Store from "./store/store"
 
-interface State{
-  store: Store, 
+interface State {
+  store: Store,
 }
 
-const store = new Store();
+export const store = new Store();
 
 export const Context = createContext<State>({
   store,
@@ -15,7 +15,7 @@ export const Context = createContext<State>({
 
 ReactDOM.render(
   <Context.Provider value = {{
-    store,
+    store
   }}>
     <App/>
   </Context.Provider>,
