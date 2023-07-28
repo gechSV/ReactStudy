@@ -8,6 +8,7 @@ import {API_URL} from '../http'
 export default class Store{
     user = {} as IUser;
     isAuth = false;
+    isLoading = false; 
 
     constructor(){ 
         makeAutoObservable(this);
@@ -21,13 +22,19 @@ export default class Store{
         this.user = user;
     }
 
+    setLoading(bool: boolean){
+        this.isLoading = bool;
+    }
+
+
     async login(email: string, password: string){
         try {
             console.log("Store.ts login: ", email, password)
             const response = await AuthService.login(email, password);
             console.log('store registration' + JSON.stringify(response.data));
-            localStorage.setItem('token', 'Bearer ' + response.data.accesToken);
+            localStorage.setItem('token', response.data.accesToken);
             this.setAuth(true);
+            console.log("response.data.user " + response.data.user)
             this.setUser(response.data.user);
         } catch (err) {
             if(err instanceof Error){
@@ -43,7 +50,7 @@ export default class Store{
         try {
             const response = await AuthService.registration(email, password);
             console.log('store registration' + response.data);
-            localStorage.setItem('token', 'Bearer ' + response.data.accesToken);
+            localStorage.setItem('token', response.data.accesToken);
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
@@ -74,10 +81,11 @@ export default class Store{
     }
 
     async checkAuth(){ 
+        this.setLoading(true);
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true})
-            console.log(response);
-            localStorage.setItem('token', 'Bearer ' + response.data.accesToken);
+            console.log(response)
+            localStorage.setItem('token', response.data.accesToken);
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (err) {
@@ -87,6 +95,8 @@ export default class Store{
             else{
                 console.log('Unexcepted error', err);
             }
+        }finally{
+            this.setLoading(false);
         }
     }
 

@@ -68,7 +68,7 @@ class UserService {
 
     async refresh(refreshToken){
         
-        if(refreshToken){
+        if(!refreshToken){
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
@@ -80,7 +80,9 @@ class UserService {
 
         const user = await UserModel.findById(userData.id);
         const userDto = new UserDto(user);
-        const tokens = tokenService.saveToken(userDto.id, (await tokens).refreshToken);
+        const tokens = tokenService.generateTokens({...userDto});
+
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return {...tokens, userDto}
     }
 
