@@ -6,20 +6,20 @@ import {IUser} from "./models/IUser";
 import UserService from "./services/UserService";
 
 
-function App() {
+const App = () => {
   const {store} = useContext(Context);
   const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-        store.checkAuth()
+        store.checkAuth();
     }
   }, [])
 
   async function getUsers(){
     try {
       const response = await UserService.fetchUsers();
-      setUsers(response.data);
+       setUsers(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -31,13 +31,19 @@ function App() {
 
   if(!store.isAuth){
     return(
-      <LoginForm/>
-    )
+      <div>
+        <LoginForm/>
+        <div>
+          <button onClick={getUsers}>Get users</button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="App">
-      <h1>{store.isAuth ? `Пользователь авторизован ${store}` : `Авторизуйтесь`}</h1>
+      <h1>{store.isAuth ? `Пользователь авторизован ${store.user.email}` : `Авторизуйтесь`}</h1>
+      <h2>{store.user.isActivated ? "Почта подтверждена" : "Требуется подтверждение почтового адресса"}</h2>
       <button onClick={() => store.logout()}>Exit</button>
       <div>
         <button onClick={getUsers}>Get users</button>

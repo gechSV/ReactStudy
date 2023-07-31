@@ -19,8 +19,10 @@ export default class Store{
     }
 
     setUser(user: IUser){
-        this.user = user;
+        this.user = user; 
+        // console.log('setUser' , JSON.stringify(user))
     }
+
 
     setLoading(bool: boolean){
         this.isLoading = bool;
@@ -29,13 +31,14 @@ export default class Store{
 
     async login(email: string, password: string){
         try {
-            console.log("Store.ts login: ", email, password)
+            // console.log("Store.ts login: ", email, password)
             const response = await AuthService.login(email, password);
-            console.log('store registration' + JSON.stringify(response.data));
+            // console.log('store registration' + JSON.stringify(response.data));
             localStorage.setItem('token', response.data.accesToken);
             this.setAuth(true);
-            console.log("response.data.user " + response.data.user)
+            console.log("response.data.user " + response.data.user.email)
             this.setUser(response.data.user);
+            console.log('login', response, 'user' ,this.user.email)
         } catch (err) {
             if(err instanceof Error){
                 console.log(err.message);
@@ -84,7 +87,7 @@ export default class Store{
         this.setLoading(true);
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true})
-            console.log(response)
+            console.log(response);
             localStorage.setItem('token', response.data.accesToken);
             this.setAuth(true);
             this.setUser(response.data.user);
