@@ -1,4 +1,5 @@
 const UserModel = require('../models/user-model');
+const RoleModel = require('..//models/role-model');
 const bcrypt = require('bcrypt');
 const mailService = require('./mail-service');
 const tokenService = require('../service/token-service');
@@ -8,6 +9,10 @@ const ApiError = require('../exceptoins/api-error')
 
 class UserService {
     async registration(email, password){
+        const roleUser = await RoleModel.create({value: 'USER'});
+        const roleAdmin = await RoleModel.create({value: 'ADMIN'});
+
+
         const candidate = await UserModel.findOne({email});
         console.log(candidate);
         if( candidate ){
@@ -17,7 +22,8 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3);
         // Генерация ссылки
         const activationLink = uuid.v4(); 
-        const user = await UserModel.create({email, password: hashPassword, activationLink});
+        // const role = 'USER' 
+        const user = await UserModel.create({email, password: hashPassword, activationLink, });
         // Отправка сообщения на майл
         // await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
