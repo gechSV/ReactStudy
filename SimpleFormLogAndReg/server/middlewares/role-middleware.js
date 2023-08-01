@@ -8,10 +8,16 @@ module.exports = function(roles){
         }
 
         try {
-           const accesToken = req.headers.autorization.split(' ')[1];
+           const authorizationHeader = req.headers.authorization;
+            if(!authorizationHeader){
+                return next(ApiError.UnauthorizedError());
+            }
+
+           const accesToken = authorizationHeader.split(' ')[1];
            if(!accesToken){
             return next(ApiError.UnauthorizedError());
            } 
+           console.log('accesToken: ', accesToken)
 
            const userData = tokenService.validateAccessToken(accesToken);
            if(!userData){
@@ -19,15 +25,17 @@ module.exports = function(roles){
            }
 
            let hasRole = false;
-           userData.forEach(role => {
-            if (roles.include(role)){
+           console.log("userData: ", userData)
+           userData.roles.forEach(role => {
+            if(roles.includes(role)){
                 hasRole = true;
             }
-           });
+           });           
 
            if(!hasRole){
             return next(ApiError.ForbiddenError("У вас нет доступа"));
            }
+
            next();
 
         } catch (e) {

@@ -5,13 +5,12 @@ const mailService = require('./mail-service');
 const tokenService = require('../service/token-service');
 const uuid = require('uuid');
 const UserDto = require('../dtos/user-dto');
-const ApiError = require('../exceptoins/api-error')
+const ApiError = require('../exceptoins/api-error');
 
 class UserService {
     async registration(email, password){
-        const roleUser = await RoleModel.create({value: 'USER'});
-        const roleAdmin = await RoleModel.create({value: 'ADMIN'});
-
+        // const roleUser = await RoleModel.create({value: 'USER'});
+        // const roleAdmin = await RoleModel.create({value: 'ADMIN'});
 
         const candidate = await UserModel.findOne({email});
         console.log(candidate);
@@ -22,11 +21,13 @@ class UserService {
         const hashPassword = await bcrypt.hash(password, 3);
         // Генерация ссылки
         const activationLink = uuid.v4(); 
-        // const role = 'USER' 
-        const user = await UserModel.create({email, password: hashPassword, activationLink, });
+        // Получение объекта роли
+        const userRole = await RoleModel.findOne({value: "USER"});
+        const user = await UserModel.create(
+            {email, password: hashPassword, activationLink, roles: [userRole.value]});
+
         // Отправка сообщения на майл
         // await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
-
         const userDto = new UserDto(user); 
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
