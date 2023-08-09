@@ -1,8 +1,65 @@
 const ApiError = require("../exceptoins/api-error");
 const roleModel = require("../models/role-model");
 const UserModel = require('../models/user-model');
+const bcrypt = require('bcrypt');
+const UserDto = require('../dtos/user-dto');
+const tokenService = require('../service/token-service');
+
+
 
 class AdminService {
+    async login(email, password){
+        const admin = await UserModel.findOne({email: email});
+        if(!admin){ 
+            throw ApiError.BadRequest('Пользователь с таким email не найден');
+        }
+
+        let hasRole = false; 
+        admin.roles.forEach(role => {
+            if(["ADMIN", "MODER"].includes(role)){
+                hasRole = true;
+            }
+        });
+
+        if(!hasRole){
+            throw ApiError.BadRequest('Нет доступа');
+        }
+        const isPassEquals = await bcrypt.compare(password, admin.password);
+        if(!isPassEquals) {
+            throw ApiError.BadRequest('Неверный пароль');
+        }
+        
+        const userDto = new UserDto(admin);
+        const tokens = tokenService.generateTokens({...userDto});
+
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto}
+    }
+
+    async logout(refreshToken){
+        const token = await tokenService.removeToken(refreshToken);
+        return token;
+    }
+
+    async refresh(refreshToken){
+        
+        if(!refreshToken){
+            throw ApiError.UnauthorizedError();
+        }
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        const tokenFromDb = await tokenService.findToken(refreshToken);
+
+        if(!userData || !tokenFromDb){
+            throw ApiError.UnauthorizedError();
+        }
+
+        const user = await UserModel.findById(userData.id);
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateTokens({...userDto});
+
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto}
+    }
 
     async newRole(roleName){
         const candidateRole = await roleModel.findOne({value: roleName});
@@ -75,6 +132,9 @@ class AdminService {
         return userUpd;
     }
 
+    async getProductItem(){
+        
+    }
 
     
 }
