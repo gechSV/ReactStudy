@@ -6,6 +6,8 @@ import axios from "axios";
 import {API_URL} from '../http'
 import ProductService from "../services/ProductService";
 import { ProductResponse } from "../models/response/ProductResponse";
+import React, { useContext, useEffect, useState} from 'react';
+import { IProduct } from "../models/response/IProduct";
 
 export default class Store{
     user = {} as IUser;
@@ -13,7 +15,8 @@ export default class Store{
     isLoading = false; 
 
     isOpenProductTable = false;
-    products = <ProductResponse[]>([]); 
+    isOpenAddProductWindow = false;
+    products = {} as IProduct[];
 
     constructor(){ 
         makeAutoObservable(this);
@@ -36,7 +39,7 @@ export default class Store{
         this.isOpenProductTable = bool;
     };
 
-    setProducts(products: ProductResponse[]){
+    setProducts(products: IProduct[]){
         this.products = products;
     }
 
@@ -115,9 +118,23 @@ export default class Store{
     async openProductTable(){
         try {
             const response = await ProductService.getAllProducts();
-            this.setProducts(response.data);
+            this.setProducts(response.data.products);
+            console.log("products: ", response.data.products)
             console.log("products: ", this.products[1])
             this.setOpenProductTable(true);
+        } catch (e) {
+            if (e instanceof Error){
+                console.log(e.message);
+            }
+            else{
+                console.log('Unexcepted error', e);
+            }
+        }
+    }
+
+    async openAddProductWindow(){
+        try {
+            this.isOpenAddProductWindow = true;
         } catch (e) {
             if (e instanceof Error){
                 console.log(e.message);

@@ -1,7 +1,5 @@
+import { IProduct } from "./IProduct"; 
+
 export interface ProductResponse{
-    name: string;
-    description: string;
-    price: number;
-    photo: Buffer;
-    quantity: number;
+    products: IProduct[];
 }

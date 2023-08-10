@@ -9,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import Header from './components/Header';
 import NavigationBar from './components/NavigationBar';
 import ProductTable from './components/ProductTable/ProductTable';
+import AddProductWindow from './components/ProductTable/AddProductWindow';
 
 
 const App = () => {
