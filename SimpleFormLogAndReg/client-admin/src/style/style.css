@@ -119,14 +119,20 @@ tr:hover td {background:#80CBC4}
     bottom: 0;
     right: 0;
     margin: 10px 10px 10px 0;
+    padding: 10px;
     border-radius: 8px;
+
 }
 
 .inputCon{
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px;
+    width: 100%;
+}
+
+.inputCon div{
+    clear:both; text-align:right;
+}
+
+.inputCon label{
+    float: left;
 }
  

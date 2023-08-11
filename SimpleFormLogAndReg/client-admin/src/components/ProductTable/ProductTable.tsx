@@ -10,6 +10,7 @@ const ProductTable: FC = () => {
         <div>
             <MenuProductTable/>
             <div className='TableCon'>
+            {store.isOpenAddProductWindow ? <AddProductWindow/> : null}
                 <table>
                     <thead>
                         <tr>
@@ -30,7 +31,6 @@ const ProductTable: FC = () => {
                         })}
                     </tbody>
                 </table>
-                {store.isOpenAddProductWindow ? <AddProductWindow/> : null}
             </div>
         </div>
     )

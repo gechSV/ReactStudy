@@ -6,14 +6,27 @@ const AddProductWindow: FC = () => {
         <div className='AddProduct'>
             AddProductWindow
             <div className='inputCon'>
-                <input 
-                    type="text"
-                    placeholder='name' 
-                />
-                <input 
-                    type="text"
-                    placeholder='description' 
-                />
+                <div>
+                    <label>Название</label>
+                    <input 
+                        type="text"
+                        placeholder='name' 
+                    />
+                </div>
+                <div>
+                    <label>Описание</label>
+                    <textarea 
+                        placeholder='description' 
+                        aria-multiline
+                    />
+                </div>
+                <div>
+                    <label>Цена</label>
+                    <input 
+                        type="text"
+                        placeholder='price' 
+                    />
+                    </div>
             </div>
 
         </div>
