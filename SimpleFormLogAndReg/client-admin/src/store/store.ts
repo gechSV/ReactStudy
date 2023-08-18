@@ -121,7 +121,7 @@ export default class Store{
             this.setProducts(response.data.products);
             console.log("products: ", response.data.products)
             console.log("products: ", this.products[1])
-            this.setOpenProductTable(true);
+            this.setOpenProductTable(!this.isOpenProductTable);
         } catch (e) {
             if (e instanceof Error){
                 console.log(e.message);

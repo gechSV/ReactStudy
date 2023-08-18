@@ -1,5 +1,10 @@
-body{
-    background-color: #FAFAFA;
+
+*{
+    box-sizing: border-box;
+}
+
+html, body{
+    background-color: #fafafa;
     height: 100%;
     text-align: center;
     padding: 0;
@@ -7,8 +12,13 @@ body{
     text-align: center;
 }
 
+#root{
+    height: 100%;
+}
+
 .App {
     width: 100%;
+    height: 100%;
     text-align: center;
     height: 100%;
     margin: 0;
@@ -17,7 +27,7 @@ body{
 .header {
     height: 25px;
     width: 100%;
-    background-color: #37474F;
+    background-color: #191919;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -26,7 +36,7 @@ body{
 
 .header a{
     color: #FAFAFA;
-    margin: 0 3vh;
+    margin: 0 10px;
 }
 
 .header button{
@@ -37,45 +47,59 @@ body{
     margin: 0 3vh;
 }
 
-.NavigationBar{
+.nav-bar-con{
     width: 100%;
-    height: 60px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #78909C;
+    text-align: center;
+    background-color: #008080;
 }
 
-.NavigationBar button{
-    margin: 0 10px 0 10px;
-}
-
-.MenuProductTable{
-    background-color: #37474F;
+.nav-bar{
     width: 100%;
-    height: 50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.MenuProductTable button{
-    margin: 0 10px 0 10px;
-}
-
-.TableCon{
-    width: 100%;
-    height: auto;
+    height: 40px;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.nav-bar-but-con{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-bar button{
+    color:#CFD8DC;
+    height: 100%;
+    border: none;
+    background: none;
+    background-color: none;
+    margin: 0 10px 0 10px;
+    padding: 0;
+}
+
+.nav-button-line{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px 3px 0 0 ;
+    background-color: none;
+    bottom: 0;
+}
+
+.table-con{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 150px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 table {
-	width: auto;
-    min-width: 80%;
+	width: 90%;
 	border: none;
 	margin: 10px;
 }
@@ -112,17 +136,84 @@ table tbody tr td:last-child {
 
 tr:hover td {background:#80CBC4}
 
-.AddProduct{
-    width: 20%;
-    height: 100%;
-    background-color: #78909C;
+.tool-bar-for-table-con{
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin: 0 auto;
+    position: fixed;
     bottom: 0;
-    right: 0;
-    margin: 10px 10px 10px 0;
-    padding: 10px;
-    border-radius: 8px;
-
+    display: flex;
+    flex-direction: column;
+    background-color: #191919;
 }
+
+.tool-bar-head{
+    width: 100%;
+    height: 20px;
+    margin: 0;
+    background-color: #008080;
+}
+
+.tool-bar{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+}
+
+.button-con_1{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.button_1{
+    background: none;
+    border: none;
+    padding: 5px;
+    color: #fafafa;
+    cursor: pointer;
+    margin: 0;
+    /* border-radius: 8px; */
+}
+
+.button-line_1{
+    margin: 0;
+    padding: 0;
+    border-radius: 3px;
+    width: 100%;
+    height: 4px;
+    background-color: #fafafa;
+}
+
+
+.marginHorizontal10px{
+    margin: 0 10px; 
+}
+
+.AddProduct{
+    background-color: #37474F;
+    width: 90%;
+    height: 600px;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 10px;
+}
+
+.boxW100per{
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
+.w100per{
+    width: 100%;
+}
+
 
 .inputCon{
     width: 100%;

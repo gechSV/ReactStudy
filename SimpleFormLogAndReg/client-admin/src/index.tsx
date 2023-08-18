@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Store from "./store/store"
 import './style/style.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 interface State {
   store: Store,
