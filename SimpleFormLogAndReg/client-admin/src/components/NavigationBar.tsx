@@ -4,8 +4,10 @@ import {observer} from "mobx-react-lite";
 
 const NavigationBar: FC = () => {
     const {store} = useContext(Context);
+    const {productStore} = useContext(Context);
 
-    let butLineProduct = store.isOpenProductTable  == true? "#fafafa" : null;
+
+    let butLineProduct = productStore.isOpenProductTable  == true ? "#fafafa" : null;
     
     return(
         <div className='nav-bar-con'> 
@@ -13,7 +15,7 @@ const NavigationBar: FC = () => {
                 <div className='nav-bar-but-con'>
                     <button 
                         id = "productButton" 
-                        onClick={() => store.openProductTable()}
+                        onClick={() => productStore.openProductTable()}
                         style={{"color": butLineProduct} as React.CSSProperties}>
                         товары
                     </button>

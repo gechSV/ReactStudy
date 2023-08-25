@@ -4,19 +4,12 @@ import AuthService from "../services/AuthService";
 import { AuthResponse } from "../models/response/AuthResponse";
 import axios from "axios";
 import {API_URL} from '../http'
-import ProductService from "../services/ProductService";
-import { ProductResponse } from "../models/response/ProductResponse";
-import React, { useContext, useEffect, useState} from 'react';
-import { IProduct } from "../models/response/IProduct";
 
 export default class Store{
     user = {} as IUser;
     isAuth = false;
     isLoading = false; 
 
-    isOpenProductTable = false;
-    isOpenAddProductWindow = false;
-    products = {} as IProduct[];
 
     constructor(){ 
         makeAutoObservable(this);
@@ -35,13 +28,6 @@ export default class Store{
         this.isLoading = bool;
     }
 
-    setOpenProductTable(bool: boolean){
-        this.isOpenProductTable = bool;
-    };
-
-    setProducts(products: IProduct[]){
-        this.products = products;
-    }
 
     async login(email: string, password: string){
         try {
@@ -114,35 +100,4 @@ export default class Store{
             this.setLoading(false);
         }
     }
-
-    async openProductTable(){
-        try {
-            const response = await ProductService.getAllProducts();
-            this.setProducts(response.data.products);
-            console.log("products: ", response.data.products)
-            console.log("products: ", this.products[1])
-            this.setOpenProductTable(!this.isOpenProductTable);
-        } catch (e) {
-            if (e instanceof Error){
-                console.log(e.message);
-            }
-            else{
-                console.log('Unexcepted error', e);
-            }
-        }
-    }
-
-    async openAddProductWindow(){
-        try {
-            this.isOpenAddProductWindow = true;
-        } catch (e) {
-            if (e instanceof Error){
-                console.log(e.message);
-            }
-            else{
-                console.log('Unexcepted error', e);
-            }
-        }
-    }
-
 }

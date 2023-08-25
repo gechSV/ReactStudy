@@ -8,7 +8,7 @@ const ProductTableContainer: FC = () => {
     const {store} = useContext(Context); 
 
     return (
-        <div className='table-con'>
+        <div className='product-table-con-page'>
             <ProductTable/>
             <ToolBarProductTable/>
         </div>
