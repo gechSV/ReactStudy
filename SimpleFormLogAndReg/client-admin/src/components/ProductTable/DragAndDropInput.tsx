@@ -1,8 +1,8 @@
-import {FC, useContext, useState, useRef, useEffect} from 'react';
+import React, {FC, useContext, useState, useRef, useEffect} from 'react';
 import {Context, productStore} from '../../index';
 import {observer} from 'mobx-react-lite';
-// import { ReactComponent as img} from '../../assets/iconsSVG/drug-and-drop.svg';
-import Logo from 'assets/iconsSVG/druganddrop.svg';
+import { ReactComponent as UploadIcon } from "../../assets/iconsSVG/upload.svg";
+import { ReactComponent as CloseIcon} from '../../assets/iconsSVG/close.svg';
 
 const ContentContainer: FC = () => {
     const [isOver, setIsOver] = useState(false);
@@ -59,7 +59,7 @@ const ContentContainer: FC = () => {
   
 
     return (
-        <div>
+        <div style={{width: '500px'} as React.CSSProperties}>
             <div
                 className="drop-zone"
                 onDrop={onDrop}
@@ -67,16 +67,22 @@ const ContentContainer: FC = () => {
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
                 >
+                    <UploadIcon className='drop-zone-img'/>
             </div>
-            <div>
+            <div className='image-slider-con'>
                 {productStore.imagesRef.map((val, key) => {
                     return(
                         val ? 
+                        <div className='img-con'>
+                            <button className='del-button'>
+                                <CloseIcon className='del-img'
+                                    onClick={() => productStore.delFileByIndex(key)}/> 
+                            </button>
                             <img 
-                            onClick={() => productStore.delFileByIndex(key)}
                             ref={imageRef} 
                             alt="Preview" 
-                            src={val.toString()}></img>: null
+                            src={val.toString()}></img>
+                        </div> : null
                     )
                     })
                 }

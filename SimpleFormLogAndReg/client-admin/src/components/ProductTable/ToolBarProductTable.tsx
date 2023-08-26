@@ -57,9 +57,7 @@ const ToolBarProductTable: FC = () => {
                             <input className='standart-input' id='input-price' type="text" placeholder='Цена'/>
                         </div>
                     </div>
-                    <div style={{width: '100%'} as React.CSSProperties}>
-                        <DragAndDropInput/>
-                    </div>
+                    <DragAndDropInput/>
             </div>
         </div>
     )
